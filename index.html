@@ -1,0 +1,1277 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<link rel="stylesheet" href="style.css">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>EKTA BLOCKCHAIN WALLET</title>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+        rel="stylesheet">
+
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+</head>
+
+<style>
+    input[type=text],
+    input[type=number],
+    input[type=datetime-local],
+    select {
+
+        padding: 12px 20px;
+        margin: 8px 0;
+        display: inline-block;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+    }
+
+
+    button {
+        width: 20%;
+        height: 4%;
+        background-color: #72747a;
+        color: white;
+        padding: 14px 20px;
+
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+    button:hover {
+        background-color: #090a0a;
+        color: white;
+    }
+
+    input[type=submit]:hover {
+        background-color: #45a049;
+    }
+
+    div {
+        border-radius: 5px;
+        background-color: #f2f2f2;
+        padding: 10px;
+    }
+
+    .nine h1 {
+        text-align: center;
+        font-size: 50px;
+        text-transform: uppercase;
+        color: #222;
+        letter-spacing: 1px;
+        font-family: "Playfair Display", serif;
+        font-weight: 400;
+    }
+
+    .nine h1 span {
+        margin-top: 5px;
+        font-size: 15px;
+        color: #444;
+        word-spacing: 1px;
+        font-weight: normal;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        font-family: "Raleway", sans-serif;
+        font-weight: 500;
+
+        display: grid;
+        grid-template-columns: 1fr max-content 1fr;
+        grid-template-rows: 27px 0;
+        grid-gap: 20px;
+        align-items: center;
+    }
+
+    .nine h1 span:after,
+    .nine h1 span:before {
+        content: " ";
+        display: block;
+        border-bottom: 1px solid #ccc;
+        border-top: 1px solid #ccc;
+        height: 5px;
+        background-color: #f8f8f8;
+    }
+
+    .table {
+        font-family: Arial, Helvetica, sans-serif;
+    }
+
+    .table td {
+        border: 1px solid #e4eff8;
+    }
+
+    .table input {
+        width: 100%;
+    }
+</style>
+
+<body>
+    <div class="nine">
+        <h1>BLOCKCHAIN WALLET <span>User Dashboard</span></h1>
+        <button style="margin-left: 40%;" onclick="load()"> Connect Wallet </button><br>
+    </div>
+
+
+    <table class="table">
+        <tbody>
+
+            <tr>
+                <td>1. Contract Address:</td>
+                <td>0xA5B3d7998DC63bA5fA175EB5F877699A3A862CF6</td>
+            </tr>
+
+            <tr>
+                <td> 2. Wallet Owners : </td>
+                <td><span id="owners"> </span> </td>
+            </tr>
+            <tr>
+                <td> 3. Wallet EKTA Balance : </td>
+                <td><span id="balance1"> </span> </td>
+            </tr>
+            <tr>
+                <td> 4. Confirmation Threshold : </td>
+                <td><span id="threshold"> </span> </td>
+            </tr>
+            <tr>
+                <td> 5. Total Transaction: </td>
+                <td><span id="count"> </span> </td>
+            </tr>
+            <tr>
+                <td> 6. Executed Transactions: </td>
+                <td><span id="executed"> </span> </td>
+            </tr>
+            <tr>
+                <td> 7. Pending Transactions: </td>
+                <td><span id="pending"> </span> </td>
+            </tr>
+            <tr>
+                <td> 8. Check Whitelist Status: </td>
+                <td><input style="width: auto;" type="text" id="address3" name="address3" placeholder="Wallet Address">
+                    <button id='check' onclick="checkWhite()"> CHECK </button>
+                </td>
+            </tr>
+            <tr>
+                <td> 9. Transaction List: </td>
+                <td>
+                    <table id="listing">
+                        <thead>
+                            <tr>
+                                <th>Txn ID</th>
+                                <th>Destination</th>
+                                <th>Detail</th>
+                                <th>Value</th>
+                                <th>Confirmations</th>
+                                <th>Status</th>
+                                <th>Approve</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td> 10. Send EKTA Tokens: </td>
+                <td><input style="width: auto;" type="text" id="address1" name="address1" placeholder=" Wallet Address">
+                    <input style="width: auto;" type="number" id="amount1" name="amount1" placeholder=" Amount">
+                    <input style="width: auto;" type="text" id="detail1" name="detail1" placeholder=" Details">
+                    <button onclick="sendekta()"> SEND </button>
+                </td>
+            </tr>
+            <tr>
+                <td> 11. Send ERC20 Tokens to Whitelists: </td>
+                <td><input style="width: auto;" type="text" id="token2" name="token2"
+                        placeholder=" ERC20 Contract Address">
+                    <input style="width: auto;" type="text" id="address2" name="address2" placeholder=" Wallet Address">
+                    <input style="width: auto;" type="number" id="amount2" name="amount2" placeholder=" Amount">
+                    <input style="width: auto;" type="text" id="detail2" name="detail2" placeholder=" Details">
+                    <button onclick="senderc20()"> SEND </button>
+                </td>
+            </tr>
+            <tr>
+                <td> 12. Add MultiSig Owner: </td>
+                <td> <input style="width: auto;" type="text" id="address4" name="address4"
+                        placeholder="New Owner Address">
+                    <input style="width: auto;" type="text" id="detail4" name="detail4" placeholder=" Details">
+                    <button onclick="addOwner()"> SEND </button>
+                </td>
+            </tr>
+            <tr>
+                <td> 13. Remove MultiSig Owner: </td>
+                <td> <input style="width: auto;" type="text" id="address5" name="address5" placeholder="Owner Address">
+                    <input style="width: auto;" type="text" id="detail5" name="detail5" placeholder=" Details">
+                    <button onclick="removeOwner()"> SEND </button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+</body>
+
+
+<script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+<script>
+
+    const tokenABI = 
+    [
+        {
+            "inputs": [
+                {
+                    "internalType": "address",
+                    "name": "_owner",
+                    "type": "address"
+                }
+            ],
+            "name": "addOwner",
+            "outputs": [],
+            "stateMutability": "nonpayable",
+            "type": "function"
+        },
+        {
+            "inputs": [
+                {
+                    "internalType": "uint256",
+                    "name": "_required",
+                    "type": "uint256"
+                }
+            ],
+            "name": "changeRequirement",
+            "outputs": [],
+            "stateMutability": "nonpayable",
+            "type": "function"
+        },
+        {
+            "inputs": [
+                {
+                    "internalType": "address[]",
+                    "name": "addAddresses",
+                    "type": "address[]"
+                },
+                {
+                    "internalType": "address[]",
+                    "name": "removeaddresses",
+                    "type": "address[]"
+                }
+            ],
+            "name": "changeWhitelist",
+            "outputs": [],
+            "stateMutability": "nonpayable",
+            "type": "function"
+        },
+        {
+            "inputs": [],
+            "stateMutability": "nonpayable",
+            "type": "constructor"
+        },
+        {
+            "anonymous": false,
+            "inputs": [
+                {
+                    "indexed": true,
+                    "internalType": "address",
+                    "name": "sender",
+                    "type": "address"
+                },
+                {
+                    "indexed": true,
+                    "internalType": "uint256",
+                    "name": "transactionId",
+                    "type": "uint256"
+                }
+            ],
+            "name": "Confirmation",
+            "type": "event"
+        },
+        {
+            "inputs": [
+                {
+                    "internalType": "uint256",
+                    "name": "transactionId",
+                    "type": "uint256"
+                }
+            ],
+            "name": "confirmTransaction",
+            "outputs": [],
+            "stateMutability": "nonpayable",
+            "type": "function"
+        },
+        {
+            "inputs": [
+                {
+                    "internalType": "address",
+                    "name": "newOwner",
+                    "type": "address"
+                },
+                {
+                    "internalType": "string",
+                    "name": "_detail",
+                    "type": "string"
+                }
+            ],
+            "name": "createAddOwnerTransaction",
+            "outputs": [
+                {
+                    "internalType": "uint256",
+                    "name": "transactionId",
+                    "type": "uint256"
+                }
+            ],
+            "stateMutability": "nonpayable",
+            "type": "function"
+        },
+        {
+            "inputs": [
+                {
+                    "internalType": "address",
+                    "name": "_removeOwner",
+                    "type": "address"
+                },
+                {
+                    "internalType": "string",
+                    "name": "_detail",
+                    "type": "string"
+                }
+            ],
+            "name": "createRemoveOwnerTransaction",
+            "outputs": [
+                {
+                    "internalType": "uint256",
+                    "name": "transactionId",
+                    "type": "uint256"
+                }
+            ],
+            "stateMutability": "nonpayable",
+            "type": "function"
+        },
+        {
+            "inputs": [
+                {
+                    "internalType": "uint256",
+                    "name": "_req",
+                    "type": "uint256"
+                },
+                {
+                    "internalType": "string",
+                    "name": "_detail",
+                    "type": "string"
+                }
+            ],
+            "name": "createRequirementTransaction",
+            "outputs": [
+                {
+                    "internalType": "uint256",
+                    "name": "transactionId",
+                    "type": "uint256"
+                }
+            ],
+            "stateMutability": "nonpayable",
+            "type": "function"
+        },
+        {
+            "inputs": [
+                {
+                    "internalType": "address",
+                    "name": "newImplementation",
+                    "type": "address"
+                },
+                {
+                    "internalType": "string",
+                    "name": "_detail",
+                    "type": "string"
+                }
+            ],
+            "name": "createUpgradeTransaction",
+            "outputs": [
+                {
+                    "internalType": "uint256",
+                    "name": "transactionId",
+                    "type": "uint256"
+                }
+            ],
+            "stateMutability": "nonpayable",
+            "type": "function"
+        },
+        {
+            "inputs": [
+                {
+                    "internalType": "address[]",
+                    "name": "add",
+                    "type": "address[]"
+                },
+                {
+                    "internalType": "address[]",
+                    "name": "remove",
+                    "type": "address[]"
+                },
+                {
+                    "internalType": "string",
+                    "name": "_detail",
+                    "type": "string"
+                }
+            ],
+            "name": "createWhitelistTransaction",
+            "outputs": [
+                {
+                    "internalType": "uint256",
+                    "name": "transactionId",
+                    "type": "uint256"
+                }
+            ],
+            "stateMutability": "nonpayable",
+            "type": "function"
+        },
+        {
+            "anonymous": false,
+            "inputs": [
+                {
+                    "indexed": true,
+                    "internalType": "address",
+                    "name": "sender",
+                    "type": "address"
+                },
+                {
+                    "indexed": false,
+                    "internalType": "uint256",
+                    "name": "value",
+                    "type": "uint256"
+                }
+            ],
+            "name": "Deposit",
+            "type": "event"
+        },
+        {
+            "inputs": [
+                {
+                    "internalType": "uint256",
+                    "name": "transactionId",
+                    "type": "uint256"
+                }
+            ],
+            "name": "executeTransaction",
+            "outputs": [],
+            "stateMutability": "nonpayable",
+            "type": "function"
+        },
+        {
+            "anonymous": false,
+            "inputs": [
+                {
+                    "indexed": true,
+                    "internalType": "uint256",
+                    "name": "transactionId",
+                    "type": "uint256"
+                }
+            ],
+            "name": "Execution",
+            "type": "event"
+        },
+        {
+            "anonymous": false,
+            "inputs": [
+                {
+                    "indexed": true,
+                    "internalType": "uint256",
+                    "name": "transactionId",
+                    "type": "uint256"
+                }
+            ],
+            "name": "ExecutionFailure",
+            "type": "event"
+        },
+        {
+            "inputs": [
+                {
+                    "internalType": "address[]",
+                    "name": "_owners",
+                    "type": "address[]"
+                },
+                {
+                    "internalType": "uint256",
+                    "name": "_required",
+                    "type": "uint256"
+                }
+            ],
+            "name": "initialize",
+            "outputs": [],
+            "stateMutability": "nonpayable",
+            "type": "function"
+        },
+        {
+            "anonymous": false,
+            "inputs": [
+                {
+                    "indexed": false,
+                    "internalType": "uint8",
+                    "name": "version",
+                    "type": "uint8"
+                }
+            ],
+            "name": "Initialized",
+            "type": "event"
+        },
+        {
+            "anonymous": false,
+            "inputs": [
+                {
+                    "indexed": true,
+                    "internalType": "address",
+                    "name": "owner",
+                    "type": "address"
+                }
+            ],
+            "name": "OwnerAddition",
+            "type": "event"
+        },
+        {
+            "anonymous": false,
+            "inputs": [
+                {
+                    "indexed": true,
+                    "internalType": "address",
+                    "name": "owner",
+                    "type": "address"
+                }
+            ],
+            "name": "OwnerRemoval",
+            "type": "event"
+        },
+        {
+            "inputs": [
+                {
+                    "internalType": "address",
+                    "name": "_owner",
+                    "type": "address"
+                }
+            ],
+            "name": "removeOwner",
+            "outputs": [],
+            "stateMutability": "nonpayable",
+            "type": "function"
+        },
+        {
+            "anonymous": false,
+            "inputs": [
+                {
+                    "indexed": false,
+                    "internalType": "uint256",
+                    "name": "required",
+                    "type": "uint256"
+                }
+            ],
+            "name": "RequirementChange",
+            "type": "event"
+        },
+        {
+            "anonymous": false,
+            "inputs": [
+                {
+                    "indexed": true,
+                    "internalType": "address",
+                    "name": "sender",
+                    "type": "address"
+                },
+                {
+                    "indexed": true,
+                    "internalType": "uint256",
+                    "name": "transactionId",
+                    "type": "uint256"
+                }
+            ],
+            "name": "Revocation",
+            "type": "event"
+        },
+        {
+            "inputs": [
+                {
+                    "internalType": "uint256",
+                    "name": "transactionId",
+                    "type": "uint256"
+                }
+            ],
+            "name": "revokeConfirmation",
+            "outputs": [],
+            "stateMutability": "nonpayable",
+            "type": "function"
+        },
+        {
+            "inputs": [
+                {
+                    "internalType": "address",
+                    "name": "destination",
+                    "type": "address"
+                },
+                {
+                    "internalType": "uint256",
+                    "name": "value",
+                    "type": "uint256"
+                },
+                {
+                    "internalType": "string",
+                    "name": "_detail",
+                    "type": "string"
+                }
+            ],
+            "name": "sendEktaTransaction",
+            "outputs": [
+                {
+                    "internalType": "uint256",
+                    "name": "transactionId",
+                    "type": "uint256"
+                }
+            ],
+            "stateMutability": "nonpayable",
+            "type": "function"
+        },
+        {
+            "inputs": [
+                {
+                    "internalType": "address",
+                    "name": "destination",
+                    "type": "address"
+                },
+                {
+                    "internalType": "address",
+                    "name": "receiver",
+                    "type": "address"
+                },
+                {
+                    "internalType": "uint256",
+                    "name": "amount",
+                    "type": "uint256"
+                },
+                {
+                    "internalType": "string",
+                    "name": "_detail",
+                    "type": "string"
+                }
+            ],
+            "name": "sendERC20Transaction",
+            "outputs": [
+                {
+                    "internalType": "uint256",
+                    "name": "transactionId",
+                    "type": "uint256"
+                }
+            ],
+            "stateMutability": "nonpayable",
+            "type": "function"
+        },
+        {
+            "anonymous": false,
+            "inputs": [
+                {
+                    "indexed": true,
+                    "internalType": "address[]",
+                    "name": "Owner",
+                    "type": "address[]"
+                },
+                {
+                    "indexed": false,
+                    "internalType": "uint256",
+                    "name": "Required",
+                    "type": "uint256"
+                }
+            ],
+            "name": "SmartWalletInitialized",
+            "type": "event"
+        },
+        {
+            "anonymous": false,
+            "inputs": [
+                {
+                    "indexed": true,
+                    "internalType": "uint256",
+                    "name": "transactionId",
+                    "type": "uint256"
+                }
+            ],
+            "name": "Submission",
+            "type": "event"
+        },
+        {
+            "stateMutability": "payable",
+            "type": "receive"
+        },
+        {
+            "inputs": [
+                {
+                    "internalType": "uint256",
+                    "name": "",
+                    "type": "uint256"
+                },
+                {
+                    "internalType": "address",
+                    "name": "",
+                    "type": "address"
+                }
+            ],
+            "name": "confirmations",
+            "outputs": [
+                {
+                    "internalType": "bool",
+                    "name": "",
+                    "type": "bool"
+                }
+            ],
+            "stateMutability": "view",
+            "type": "function"
+        },
+        {
+            "inputs": [
+                {
+                    "internalType": "uint256",
+                    "name": "transactionId",
+                    "type": "uint256"
+                }
+            ],
+            "name": "getConfirmationCount",
+            "outputs": [
+                {
+                    "internalType": "uint256",
+                    "name": "count",
+                    "type": "uint256"
+                }
+            ],
+            "stateMutability": "view",
+            "type": "function"
+        },
+        {
+            "inputs": [
+                {
+                    "internalType": "uint256",
+                    "name": "transactionId",
+                    "type": "uint256"
+                }
+            ],
+            "name": "getConfirmations",
+            "outputs": [
+                {
+                    "internalType": "address[]",
+                    "name": "_confirmations",
+                    "type": "address[]"
+                }
+            ],
+            "stateMutability": "view",
+            "type": "function"
+        },
+        {
+            "inputs": [],
+            "name": "getOwners",
+            "outputs": [
+                {
+                    "internalType": "address[]",
+                    "name": "",
+                    "type": "address[]"
+                }
+            ],
+            "stateMutability": "view",
+            "type": "function"
+        },
+        {
+            "inputs": [
+                {
+                    "internalType": "bool",
+                    "name": "pending",
+                    "type": "bool"
+                },
+                {
+                    "internalType": "bool",
+                    "name": "executed",
+                    "type": "bool"
+                }
+            ],
+            "name": "getTransactionCount",
+            "outputs": [
+                {
+                    "internalType": "uint256",
+                    "name": "count",
+                    "type": "uint256"
+                }
+            ],
+            "stateMutability": "view",
+            "type": "function"
+        },
+        {
+            "inputs": [
+                {
+                    "internalType": "uint256",
+                    "name": "from",
+                    "type": "uint256"
+                },
+                {
+                    "internalType": "uint256",
+                    "name": "to",
+                    "type": "uint256"
+                },
+                {
+                    "internalType": "bool",
+                    "name": "pending",
+                    "type": "bool"
+                },
+                {
+                    "internalType": "bool",
+                    "name": "executed",
+                    "type": "bool"
+                }
+            ],
+            "name": "getTransactionIds",
+            "outputs": [
+                {
+                    "internalType": "uint256[]",
+                    "name": "_transactionIds",
+                    "type": "uint256[]"
+                }
+            ],
+            "stateMutability": "view",
+            "type": "function"
+        },
+        {
+            "inputs": [
+                {
+                    "internalType": "uint256",
+                    "name": "transactionId",
+                    "type": "uint256"
+                }
+            ],
+            "name": "isConfirmed",
+            "outputs": [
+                {
+                    "internalType": "bool",
+                    "name": "status",
+                    "type": "bool"
+                }
+            ],
+            "stateMutability": "view",
+            "type": "function"
+        },
+        {
+            "inputs": [
+                {
+                    "internalType": "address",
+                    "name": "",
+                    "type": "address"
+                }
+            ],
+            "name": "isOwner",
+            "outputs": [
+                {
+                    "internalType": "bool",
+                    "name": "",
+                    "type": "bool"
+                }
+            ],
+            "stateMutability": "view",
+            "type": "function"
+        },
+        {
+            "inputs": [],
+            "name": "MAX_OWNER_COUNT",
+            "outputs": [
+                {
+                    "internalType": "uint256",
+                    "name": "",
+                    "type": "uint256"
+                }
+            ],
+            "stateMutability": "view",
+            "type": "function"
+        },
+        {
+            "inputs": [
+                {
+                    "internalType": "uint256",
+                    "name": "",
+                    "type": "uint256"
+                }
+            ],
+            "name": "owners",
+            "outputs": [
+                {
+                    "internalType": "address",
+                    "name": "",
+                    "type": "address"
+                }
+            ],
+            "stateMutability": "view",
+            "type": "function"
+        },
+        {
+            "inputs": [],
+            "name": "required",
+            "outputs": [
+                {
+                    "internalType": "uint256",
+                    "name": "",
+                    "type": "uint256"
+                }
+            ],
+            "stateMutability": "view",
+            "type": "function"
+        },
+        {
+            "inputs": [],
+            "name": "transactionCount",
+            "outputs": [
+                {
+                    "internalType": "uint256",
+                    "name": "",
+                    "type": "uint256"
+                }
+            ],
+            "stateMutability": "view",
+            "type": "function"
+        },
+        {
+            "inputs": [
+                {
+                    "internalType": "uint256",
+                    "name": "",
+                    "type": "uint256"
+                }
+            ],
+            "name": "transactions",
+            "outputs": [
+                {
+                    "internalType": "address",
+                    "name": "destination",
+                    "type": "address"
+                },
+                {
+                    "internalType": "uint256",
+                    "name": "value",
+                    "type": "uint256"
+                },
+                {
+                    "internalType": "bytes",
+                    "name": "data",
+                    "type": "bytes"
+                },
+                {
+                    "internalType": "string",
+                    "name": "detail",
+                    "type": "string"
+                },
+                {
+                    "internalType": "bool",
+                    "name": "executed",
+                    "type": "bool"
+                }
+            ],
+            "stateMutability": "view",
+            "type": "function"
+        },
+        {
+            "inputs": [
+                {
+                    "internalType": "address",
+                    "name": "",
+                    "type": "address"
+                }
+            ],
+            "name": "whitelist",
+            "outputs": [
+                {
+                    "internalType": "bool",
+                    "name": "",
+                    "type": "bool"
+                }
+            ],
+            "stateMutability": "view",
+            "type": "function"
+        }
+    ];
+
+    const tokenAddress = "0xA5B3d7998DC63bA5fA175EB5F877699A3A862CF6";
+
+    </script>
+
+
+    <script>
+    async function loadWeb3() {
+        if (window.ethereum) {
+            window.web3 = new Web3(window.ethereum);
+            let n = ethereum.chainId;
+            // alert(n)
+            try {
+                if (n != '0x3ec') {
+                    alert("change to ekta testnet");
+                    return;
+                }
+                const accounts = await ethereum.request({ method: 'eth_requestAccounts' })
+                    .then((resp) => {
+                        load_data();
+                    })
+                    .catch((err) => {
+                        console.log(err);
+                    });
+
+            } catch (err) {
+                console.log(err);
+            }
+        } else {
+            alert('Please Install Metamask to continue');
+        }
+    }
+
+    async function load_data() {
+        console.log('data loading');
+
+        window.contract = await loadTokenContract();
+        const admin = await window.contract.methods.getOwners().call();
+        document.getElementById("owners").textContent = admin;
+
+        const balance = await window.contract.methods.required().call();
+        document.getElementById("threshold").textContent = balance;
+
+        document.getElementById("balance1").textContent = web3.utils.fromWei(await web3.eth.getBalance(tokenAddress));
+
+        const supply = await window.contract.methods.transactionCount().call();
+        document.getElementById("count").textContent = supply;
+        let total = supply;
+
+        const exe = await window.contract.methods.getTransactionCount(false, true).call();
+        document.getElementById("executed").textContent = exe;
+
+        const pending = await window.contract.methods.getTransactionCount(true, false).call();
+        document.getElementById("pending").textContent = pending;
+
+        let data = [];
+        for (i = 0; i < total; i++) {
+
+            let detail = await window.contract.methods.transactions(i).call();
+            data[i] = { "id": i, "destination": detail.destination, "detail": detail.detail, confirmtions: detail.confirmations, "executed": detail.executed, "value": web3.utils.fromWei(detail.value) }
+            if (detail.executed == false) {
+                let conf = await window.contract.methods.getConfirmationCount(i).call();
+                data[i]["confirmtions"] = conf;
+            } else {
+                data[i]["confirmtions"] = balance;
+            }
+        }
+        console.log(data);
+
+        // Get table body element
+        var tableBody = document.getElementById('listing').getElementsByTagName('tbody')[0];
+
+        while (tableBody.rows.length > 0) {
+            tableBody.deleteRow(0);
+        }
+        // Loop through data and create table rows
+        for (var i = 0; i < data.length; i++) {
+            var row = tableBody.insertRow(i);
+            row.insertCell(0).innerHTML = data[i].id;
+            row.insertCell(1).innerHTML = data[i].destination;
+            row.insertCell(2).innerHTML = data[i].detail;
+            row.insertCell(3).innerHTML = data[i].value;
+            row.insertCell(4).innerHTML = data[i].confirmtions;
+            row.insertCell(5).innerHTML = data[i].executed;
+            if (data[i].executed == false) {
+                const account = await getCurrentAccount();
+                if (!await window.contract.methods.confirmations(i, account).call()) {
+                    const button = document.createElement("button");
+                    button.textContent = "Approve";
+                    button.style.backgroundColor = "blue";
+                    button.style.color = "white";
+                    button.style.borderRadius = "5px";
+                    // button.onclick = appprove(i);
+                    row.insertCell(6).appendChild(button);
+                }
+            }
+        }
+    }
+
+    async function loadTokenContract() {
+        try {
+            return await new window.web3.eth.Contract(tokenABI, tokenAddress);
+        } catch (err) {
+            console.log(err);
+        }
+    }
+
+    async function getCurrentAccount() {
+        try {
+            const accounts = await window.web3.eth.getAccounts();
+            return accounts[0];
+        } catch (err) {
+            console.log(err);
+        }
+    }
+
+    async function sendekta() {
+        try {
+            window.contract = await loadTokenContract();
+            const account = await getCurrentAccount();
+            var gas = await window.web3.eth.getGasPrice();
+            var to = $('#address1').val();
+            var value = $('#amount1').val();
+            var detail = $('#detail1').val();
+
+            let coolNumber = await window.contract.methods.sendEktaTransaction(to, web3.utils.toWei(value, "ether"), detail).send({ from: account, gasPrice: gas })
+                .on('transactionHash', function (hash) {
+                    console.log(hash);
+                    alert("Successfully, wait for 5 seconds to reload");
+                })
+                .on('receipt', function (receipt) {
+                    location.reload();
+                })
+                .on('error', function (error, receipt) {
+                    console.log(error);
+                });
+            return;
+        } catch (err) {
+            console.log(err);
+        }
+
+    }
+
+    async function senderc20() {
+        try {
+            window.contract = await loadTokenContract();
+            const account = await getCurrentAccount();
+            var gas = await window.web3.eth.getGasPrice();
+            var to = $('#address2').val();
+            var value = $('#amount2').val();
+            var detail = $('#detail2').val();
+            var token = $('#token2').val();
+
+            let coolNumber = await window.contract.methods.sendERC20Transaction(token, to, web3.utils.toWei(value, "ether"), detail).send({ from: account, gasPrice: gas })
+                .on('transactionHash', function (hash) {
+                    console.log(hash);
+                    alert("Successfully, wait for 5 seconds to reload");
+                })
+                .on('receipt', function (receipt) {
+                    location.reload();
+                })
+                .on('error', function (error, receipt) {
+                    console.log(error);
+                });
+            return;
+        } catch (err) {
+            console.log(err);
+        }
+
+    }
+
+    async function addOwner() {
+        try {
+            window.contract = await loadTokenContract();
+            const account = await getCurrentAccount();
+            var gas = await window.web3.eth.getGasPrice();
+            var to = $('#address4').val();
+            var detail = $('#detail4').val();
+
+            let coolNumber = await window.contract.methods.createAddOwnerTransaction(to, detail).send({ from: account, gasPrice: gas })
+                .on('transactionHash', function (hash) {
+                    console.log(hash);
+                    alert("Successfully, wait for 5 seconds to reload");
+                })
+                .on('receipt', function (receipt) {
+                    location.reload();
+                })
+                .on('error', function (error, receipt) {
+                    console.log(error);
+                });
+            return;
+        } catch (err) {
+            console.log(err);
+        }
+
+    }
+
+    async function removeOwner() {
+        try {
+            window.contract = await loadTokenContract();
+            const account = await getCurrentAccount();
+            var gas = await window.web3.eth.getGasPrice();
+            var to = $('#address5').val();
+            var detail = $('#detail5').val();
+
+            let coolNumber = await window.contract.methods.createRemoveOwnerTransaction(to, detail).send({ from: account, gasPrice: gas })
+                .on('transactionHash', function (hash) {
+                    console.log(hash);
+                    alert("Successfully, wait for 5 seconds to reload");
+                })
+                .on('receipt', function (receipt) {
+                    location.reload();
+                })
+                .on('error', function (error, receipt) {
+                    console.log(error);
+                });
+            return;
+        } catch (err) {
+            console.log(err);
+        }
+
+    }
+
+    async function checkWhite() {
+        try {
+            window.contract = await loadTokenContract();
+            var gas = await window.web3.eth.getGasPrice();
+            var to = $('#address3').val();
+
+            let coolNumber = await window.contract.methods.whitelist(to).call();
+            document.getElementById("check").innerHTML = coolNumber
+            return;
+        } catch (err) {
+            console.log(err);
+        }
+    }
+
+    async function approve(i) {
+        try {
+            window.contract = await loadTokenContract();
+            const account = await getCurrentAccount();
+            var gas = await window.web3.eth.getGasPrice();
+            let coolNumber = await window.contract.methods.confirmTransaction(i).send({ from: account, gasPrice: gas })
+                .on('transactionHash', function (hash) {
+                    console.log(hash);
+                    alert("Successfully, wait for 5 seconds to reload");
+                })
+                .on('receipt', function (receipt) {
+                    location.reload();
+                })
+                .on('error', function (error, receipt) {
+                    console.log(error);
+                });
+            return;
+        } catch (err) {
+            console.log(err);
+        }
+    };
+
+    async function load() {
+        try {
+            await loadWeb3();
+        } catch (err) {
+            console.log(err);
+        }
+    }
+
+    $(document).ready(function () {
+        load();
+    });
+
+</script>
+
+<!-- end of sixth section -->
+<!-- jQuery library -->
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"></script>
+
+<!-- Popper JS -->
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+
+<!-- Latest compiled JavaScript -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"></script>
+
+</html>
