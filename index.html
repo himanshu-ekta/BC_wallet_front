@@ -212,6 +212,14 @@
                     <button onclick="removeOwner()"> SEND </button>
                 </td>
             </tr>
+            <tr>
+                <td> 14. Create/Remove Whitelist: </td>
+                <td> <input style="width: auto;" type="text" id="address6" name="address6" placeholder="Add Addresses">
+                    <input style="width: auto;" type="text" id="address7" name="address7" placeholder="Remove Addresses">
+                    <input style="width: auto;" type="text" id="detail6" name="detail6" placeholder=" Details">
+                    <button onclick="whitelist()"> SEND </button>
+                </td>
+            </tr>
         </tbody>
     </table>
 
@@ -220,7 +228,6 @@
 
 <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-
 <script>
 
     const tokenABI = 
@@ -1197,6 +1204,45 @@
             var detail = $('#detail5').val();
 
             let coolNumber = await window.contract.methods.createRemoveOwnerTransaction(to, detail).send({ from: account, gasPrice: gas })
+                .on('transactionHash', function (hash) {
+                    console.log(hash);
+                    alert("Successfully, wait for 5 seconds to reload");
+                })
+                .on('receipt', function (receipt) {
+                    location.reload();
+                })
+                .on('error', function (error, receipt) {
+                    console.log(error);
+                });
+            return;
+        } catch (err) {
+            console.log(err);
+        }
+
+    }
+
+    async function whitelist() {
+        try {
+            window.contract = await loadTokenContract();
+            const account = await getCurrentAccount();
+            var gas = await window.web3.eth.getGasPrice();
+            var add = $('#address6').val();
+            if(add != ""){
+                add = add.split(',');
+            }else{
+                add = [];
+            }
+        
+            var remove = $('#address7').val();
+            if(remove != ""){
+            remove = remove.split(',');
+            }else{
+            remove = [];
+            }
+
+            var detail = $('#detail6').val();
+
+            let coolNumber = await window.contract.methods.createWhitelistTransaction(add, remove, detail).send({ from: account, gasPrice: gas })
                 .on('transactionHash', function (hash) {
                     console.log(hash);
                     alert("Successfully, wait for 5 seconds to reload");
