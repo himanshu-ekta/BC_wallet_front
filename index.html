@@ -142,9 +142,16 @@
             <tr>
                 <td> Get User BC Wallets: </td>
                 <td><input style="width: auto;" type="text" id="bcaddress1" name="bcaddress1" placeholder="User Address">
-                    <button onclick="getBCW()"> GET BC WALLETS </button>
+                    <button onclick="getBCW()"> GET  </button>
                 </td>
             </tr>
+            <tr>
+                <td> Whitelist User to create BC Wallets: (Only Creator Role) </td>
+                <td><input style="width: auto;" type="text" id="white" name="white" placeholder="User Address">
+                    <button onclick="dowhite()"> WHITELIST </button>
+                </td>
+            </tr>
+           
           
 
 
@@ -2054,6 +2061,33 @@ const registryAddress = "0x592AB7285058ca9A560F93390773e40DFFCebf36";
 
 
 <script>
+
+    async function dowhite() {
+        try {
+            await load();
+        
+        let white = $('#white').val();
+
+        window.contract = await loadRegistryContract();
+        const account = await getCurrentAccount();    
+
+        let coolNumber = await window.contract.methods.addDappUserMap(0, white, true).send({ from: account })
+                .on('transactionHash', function (hash) {
+                    console.log(hash);
+                    alert("Successfully, wait for 5 seconds to reload");
+                })
+                .on('receipt', function (receipt) {
+                    location.reload();
+                })
+                .on('error', function (error, receipt) {
+                    console.log(error);
+                });
+            return;
+        } catch (err) {
+            console.log(err);
+        }
+
+    }
 
     async function getBCW(){
         try {
