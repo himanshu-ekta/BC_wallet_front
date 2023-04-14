@@ -151,6 +151,12 @@
                     <button onclick="dowhite()"> WHITELIST </button>
                 </td>
             </tr>
+			<tr>
+                <td> Check User whitelisted for BC wallet </td>
+                <td><input style="width: auto;" type="text" id="cwhite" name="cwhite" placeholder="User Address">
+                    <button id="cwhiteresult" onclick="checkwhite()"> CHECK </button>
+                </td>
+            </tr>
            
           
 
@@ -2061,6 +2067,23 @@ const registryAddress = "0x592AB7285058ca9A560F93390773e40DFFCebf36";
 
 
 <script>
+
+	async function checkwhite(){
+        try {
+            await load();
+        let user = $('#cwhite').val();
+        window.contract = await loadRegistryContract();
+        const account = await getCurrentAccount();    
+
+        let coolNumber = await window.contract.methods.DappUserMap(0,user).call();
+		document.getElementById("cwhiteresult").textContent = coolNumber;
+
+            return;
+        } catch (err) {
+            console.log(err);
+        }
+
+    }
 
     async function dowhite() {
         try {
